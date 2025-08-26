@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html lang='es'>
+<head>
+    <meta charset='UTF-8' />
+    <title>Grilla de Tarjetas</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <button id="btnSwagger" onclick="window.open('/swagger', '_blank')">Swagger UI</button>
+    <h2 style='text-align:center'>Listado de Tarjetas</h2>
+    <div id="searchContainer">
+        <input type="text" id="searchId" placeholder="Ingrese ID para buscar" />
+        <button onclick="buscarPorId()">Buscar</button>
+        <button onclick="mostrarTodos()">Mostrar Todos</button>
+        <div id="message"></div>
+    </div>
+
+    <div style="text-align:center; margin: 10px;">
+        <button id="btnPrev" onclick="paginaAnterior()">Anterior</button>
+        <span id="pageInfo"></span>
+        <button id="btnNext" onclick="paginaSiguiente()">Siguiente</button>
+    </div>
+
+    <table id='tarjetasTable'>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre Titular</th>
+                <th>Numero Tarjeta</th>
+                <th>Estado</th>
+                <th>Activa</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
