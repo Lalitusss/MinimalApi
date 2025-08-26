@@ -41,16 +41,14 @@ app.MapGet("/app", context =>
 // Endpoints Minimal API para tarjetas
 app.MapGet("/tarjetas", async (int? pageNumber, int? pageSize, AppDbContext db) =>
 {
-    int currentPage = pageNumber.GetValueOrDefault(1);
-    int currentPageSize = pageSize.GetValueOrDefault(100);
-
-    if (currentPage < 1) currentPage = 1;
-    if (currentPageSize < 1) currentPageSize = 25;
+    int currentPage = pageNumber ?? 1;
+    int currentPageSize = pageSize ?? 25;
 
     var totalRecords = await db.Tarjetas.CountAsync();
 
     var tarjetas = await db.Tarjetas
         .AsNoTracking()
+        .OrderBy(t => t.Id) // ordenar para garantizar resultados predecibles
         .Select(t => new {
             t.Id,
             t.NombreTitular,
@@ -82,17 +80,17 @@ app.MapPost("/tarjetas", async (Tarjeta tarjeta, AppDbContext db) =>
     return Results.Created($"/tarjetas/{tarjeta.Id}", tarjeta);
 });
 
-app.MapPut("/tarjetas/{id:int}", async (int id, Tarjeta updatedTarjeta, AppDbContext db) =>
-{
-    var tarjeta = await db.Tarjetas.FindAsync(id);
-    if (tarjeta is null) return Results.NotFound();
-    tarjeta.NombreTitular = updatedTarjeta.NombreTitular;
-    tarjeta.NumeroTarjeta = updatedTarjeta.NumeroTarjeta;
-    tarjeta.Estado = updatedTarjeta.Estado;
-    tarjeta.Activa = updatedTarjeta.Activa;
-    await db.SaveChangesAsync();
-    return Results.NoContent();
-});
+//app.MapPut("/tarjetas/{id:int}", async (int id, Tarjeta updatedTarjeta, AppDbContext db) =>
+//{
+//    var tarjeta = await db.Tarjetas.FindAsync(id);
+//    if (tarjeta is null) return Results.NotFound();
+//    tarjeta.NombreTitular = updatedTarjeta.NombreTitular;
+//    tarjeta.NumeroTarjeta = updatedTarjeta.NumeroTarjeta;
+//    tarjeta.Estado = updatedTarjeta.Estado;
+//    tarjeta.Activa = updatedTarjeta.Activa;
+//    await db.SaveChangesAsync();
+//    return Results.NoContent();
+//});
 
 app.MapDelete("/tarjetas/{id:int}", async (int id, AppDbContext db) =>
 {
